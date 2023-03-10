@@ -15,9 +15,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.diplomproject.android.diplomaproject.ui.theme.DiplomaProjectTheme
 
 class MainActivity : ComponentActivity() {
+
+    lateinit var navController: NavHostController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -26,68 +30,15 @@ class MainActivity : ComponentActivity() {
                 Surface(
                     color = MaterialTheme.colors.background
                 ) {
-                    AppScreen()
+                    navController  = rememberNavController()
+                    Setup(navController = navController)
                 }
             }
         }
     }
 }
 
-@Composable
-fun AppScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(text = "Click and Chill",
-            modifier = Modifier
-                .padding(
-                    top = 200.dp,
-                ),
-            style = MaterialTheme.typography.h3
-        )
-        AuthorizationButtons()
-        Text(
-            text = "Continue as Guest",
-            modifier = Modifier
-                .padding(bottom = 100.dp)
-                .clickable { },
-            textDecoration = TextDecoration.Underline
-
-        )
-
-    }
-}
-
-@Composable
-fun AuthorizationButtons(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.padding(bottom = 100.dp)
-    ) {
-        Button(
-            onClick = {  },
-            modifier = modifier.width(150.dp)
-        ) {
-            Text(text = "Sign In")
-        }
-        Button(
-            onClick = { },
-            modifier = modifier.width(150.dp)
-        ) {
-            Text(text = "Sign Up")
-        }
-    }
-
-}
 
 
 
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    DiplomaProjectTheme {
-        AppScreen()
-    }
-}
+
