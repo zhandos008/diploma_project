@@ -1,4 +1,4 @@
-package com.diplomproject.android.diplomaproject.Screen
+package com.diplomproject.android.diplomaproject.screen
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -16,7 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.diplomproject.android.diplomaproject.Screens
+import com.diplomproject.android.diplomaproject.Screen
 
 @Composable
 fun SignInScreen(
@@ -47,8 +47,8 @@ fun SignInScreen(
 
 @Composable
 fun SignInItems(navController: NavHostController, modifier: Modifier = Modifier) {
-    var login = remember { mutableStateOf("") }
-    var password = remember { mutableStateOf("") }
+    val login = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(bottom = 100.dp),
@@ -60,7 +60,7 @@ fun SignInItems(navController: NavHostController, modifier: Modifier = Modifier)
             modifier = modifier.height(50.dp), visualTransformation = PasswordVisualTransformation())
         Button(
             onClick = {
-                navController.navigate(Screens.SignIn.route)
+                navController.navigate(Screen.SignIn.route)
             },
             modifier = modifier.width(150.dp).padding(top = 15.dp)
         ) {

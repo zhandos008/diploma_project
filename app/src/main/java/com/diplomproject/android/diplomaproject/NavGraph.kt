@@ -1,36 +1,50 @@
 package com.diplomproject.android.diplomaproject
 
+import android.content.Context
+import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.diplomproject.android.diplomaproject.Screen.SignInScreen
-import com.diplomproject.android.diplomaproject.Screen.SignUpScreen
-import com.diplomproject.android.diplomaproject.Screen.StartAppScreen
+import androidx.navigation.navArgument
+import com.diplomproject.android.diplomaproject.screen.*
 
 @Composable
 fun Setup(
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screens.StartApp.route
+        startDestination = Screen.StartApp.route
         ) {
         composable(
-            route = Screens.StartApp.route
+            route = Screen.StartApp.route
         ) {
-            StartAppScreen(navController)
+            StartAppScreen(navController, context = context)
         }
         composable(
-            route = Screens.SignIn.route
+            route = Screen.SignIn.route
         ) {
             SignInScreen(navController)
         }
         composable(
-            route = Screens.SignUp.route
+            route = Screen.SignUp.route
         ) {
             SignUpScreen(navController)
         }
+        composable(
+            route = Screen.Menu.route
+        ) {
+            MenuScreen(navController, context = context)
+        }
+        composable(
+            route = Screen.Create.route,
+            arguments = listOf(navArgument("photoPath") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val photoPath = backStackEntry.arguments?.getString(PHOTO_ARGUMENT).toString()
+            CreateDocumentScreen(navController, photoPath)
+        }
     }
-
 }

@@ -1,5 +1,6 @@
-package com.diplomproject.android.diplomaproject.Screen
+package com.diplomproject.android.diplomaproject.screen
 
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -13,13 +14,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.diplomproject.android.diplomaproject.Screens
+import com.diplomproject.android.diplomaproject.Screen
 import com.diplomproject.android.diplomaproject.ui.theme.DiplomaProjectTheme
 
 
 @Composable
 fun StartAppScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    context: Context
 ) {
     Column(
         modifier = Modifier
@@ -39,7 +41,9 @@ fun StartAppScreen(
             text = "Continue as Guest",
             modifier = Modifier
                 .padding(bottom = 100.dp)
-                .clickable { },
+                .clickable {
+                    navController.navigate(Screen.Menu.route)
+                },
             textDecoration = TextDecoration.Underline
 
         )
@@ -57,7 +61,7 @@ fun AuthorizationButtons(
     ) {
         Button(
             onClick = {
-                navController.navigate(Screens.SignIn.route)
+                navController.navigate(Screen.SignIn.route)
             },
             modifier = modifier.width(150.dp)
         ) {
@@ -65,11 +69,13 @@ fun AuthorizationButtons(
         }
         Button(
             onClick = {
-                navController.navigate(Screens.SignUp.route)
+                navController.navigate(Screen.SignUp.route)
             },
             modifier = modifier.width(150.dp)
         ) {
-            Text(text = "Sign Up")
+            Text(
+                text = "Sign Up",
+            )
         }
     }
 
@@ -79,6 +85,6 @@ fun AuthorizationButtons(
 @Composable
 fun DefaultPreview() {
     DiplomaProjectTheme {
-        StartAppScreen(rememberNavController())
+//        StartAppScreen(rememberNavController())
     }
 }
