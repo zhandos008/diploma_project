@@ -1,41 +1,36 @@
 package com.diplomproject.android.diplomaproject.screen
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.diplomproject.android.diplomaproject.R
-import com.diplomproject.android.diplomaproject.Screen
-import java.io.Console
 import java.io.File
 import java.io.IOException
 
 @Composable
 fun MenuScreen(navController: NavHostController, context: Context) {
+    val viewModel = viewModel<MenuScreenViewModel>()
     val filePath = remember {
         mutableStateOf("")
     }
@@ -59,7 +54,21 @@ fun MenuScreen(navController: NavHostController, context: Context) {
             }
         }
     ) {
-        SearchItem(Modifier.padding(it))
+        Column {
+            SearchItem(Modifier.padding(it))
+            LazyColumn() {
+
+                items(count = viewModel.documents.value.size) {
+                    val item =  viewModel.documents.collectAsState().value.get(it)
+                    Text("${item.id}")
+                    Image(bitmap = BitmapFactory.decodeFile("/data/user/0/com.diplomproject.android.diplomaproject/files/"
+                            + item.image).asImageBitmap()
+                    , contentDescription = "sdsa",
+                    modifier = Modifier.width(350.dp).height(150.dp))
+                }
+            }
+        }
+
     }
 }
 

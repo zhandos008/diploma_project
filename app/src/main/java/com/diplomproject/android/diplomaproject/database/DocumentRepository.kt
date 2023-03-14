@@ -22,6 +22,9 @@ class DocumentRepository private constructor(context: Context){
 
     suspend fun getDocument(id: Int): Document = database.documentDao().getDocument(id)
 
+    suspend fun createDocument(document: Document) {
+        database.documentDao().createDocument(document)
+    }
 
     companion object {
         private var INSTANCE:DocumentRepository? = null
