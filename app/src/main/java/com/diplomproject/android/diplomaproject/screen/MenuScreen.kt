@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,7 +18,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,6 +28,8 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.diplomproject.android.diplomaproject.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
@@ -37,6 +42,7 @@ fun MenuScreen(navController: NavHostController, context: Context) {
 
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
+            Log.i("Testing", filePath.value)
             navController.navigate(
                 "create/" + filePath.value
             )
@@ -60,16 +66,37 @@ fun MenuScreen(navController: NavHostController, context: Context) {
 
                 items(count = viewModel.documents.value.size) {
                     val item =  viewModel.documents.collectAsState().value.get(it)
+
                     Text("${item.id}")
-                    Image(bitmap = BitmapFactory.decodeFile("/data/user/0/com.diplomproject.android.diplomaproject/files/"
-                            + item.image).asImageBitmap()
-                    , contentDescription = "sdsa",
-                    modifier = Modifier.width(350.dp).height(150.dp))
+
+                    Image(
+                        bitmap = rememberImageBitmapFromCoroutine(context = LocalContext.current, imagePath = item.image),
+                        contentDescription = "sdsa",
+                        modifier = Modifier
+                            .width(350.dp)
+                            .height(150.dp)
+                    )
                 }
             }
         }
 
+
     }
+}
+
+
+
+@Composable
+fun rememberImageBitmapFromCoroutine(context: Context, imagePath: String): ImageBitmap {
+    val imageBitmapState = remember { mutableStateOf<ImageBitmap?>(null) }
+    val ImageBitmapStub = ImageBitmap(1, 1)
+    LaunchedEffect(imagePath) {
+        withContext(Dispatchers.IO) {
+            val imageBitmap = BitmapFactory.decodeFile(context.filesDir.canonicalPath + "/" + imagePath).asImageBitmap()
+            imageBitmapState.value = imageBitmap
+        }
+    }
+    return imageBitmapState.value ?: ImageBitmapStub
 }
 
 @Composable

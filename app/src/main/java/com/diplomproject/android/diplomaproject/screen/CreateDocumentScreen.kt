@@ -1,6 +1,9 @@
 package com.diplomproject.android.diplomaproject.screen
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -14,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.modifier.modifierLocalConsumer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
@@ -23,25 +27,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.diplomproject.android.diplomaproject.Screen
 import kotlinx.coroutines.launch
+import java.io.Console
 import java.io.File
 
-
+//"/data/user/0/com.diplomproject.android.diplomaproject/files/"
 @Composable
 fun CreateDocumentScreen(navController: NavHostController, photoName: String) {
     val viewModel = viewModel<CreateDocumentScreenViewModel>()
-    val bitmapFactory = BitmapFactory.decodeFile("/data/user/0/com.diplomproject.android.diplomaproject/files/" + photoName)
+    val bitmapFactory = BitmapFactory.decodeFile(LocalContext.current.filesDir.canonicalPath+ "/" + photoName)
     Column(
         modifier = Modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Image(bitmap = bitmapFactory.asImageBitmap(), contentDescription = "newImage")
-        chooseItems(photoName, viewModel, navController)
+        ChooseItems(photoName, viewModel, navController)
     }
 }
 
 @Composable
-fun chooseItems(photoName: String, viewModel: CreateDocumentScreenViewModel, navController: NavHostController) {
+fun ChooseItems(photo: String, viewModel: CreateDocumentScreenViewModel, navController: NavHostController) {
     val options = listOf("english", "russia", "kazakh")
     val selectedOption = remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
@@ -73,7 +78,7 @@ fun chooseItems(photoName: String, viewModel: CreateDocumentScreenViewModel, nav
             }
         }
         Button(onClick = {
-            createDocument(photoName = photoName, viewModel = viewModel, navController)
+            createDocument(photo = photo, viewModel = viewModel, navController)
         }) {
             Text(text = "create")
         }
@@ -82,15 +87,19 @@ fun chooseItems(photoName: String, viewModel: CreateDocumentScreenViewModel, nav
     }
 }
 
-fun createDocument(photoName: String, viewModel: CreateDocumentScreenViewModel, navController: NavHostController) {
-    val document = viewModel.createDocument(photoName)
+fun createDocument(photo: String, viewModel: CreateDocumentScreenViewModel, navController: NavHostController) {
+    val document = viewModel.createDocument(photo)
     viewModel.viewModelScope.launch {
         viewModel.addDocument(document)
     }
 
     navController.navigate(
         Screen.Menu.route
-    )
+    ) {
+        popUpTo(Screen.Create.route) {
+            inclusive = true
+        }
+    }
 
 }
 
