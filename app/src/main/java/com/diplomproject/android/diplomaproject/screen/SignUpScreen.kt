@@ -15,6 +15,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.diplomproject.android.diplomaproject.Screen
+import com.google.firebase.auth.FirebaseAuth
 
 
 @Composable
@@ -77,7 +78,7 @@ fun SignUpItems(navController: NavHostController, modifier: Modifier = Modifier)
         )
         Button(
             onClick = {
-                navController.navigate(Screen.SignIn.route)
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(login.value, password.value)
             },
             modifier = modifier
                 .width(150.dp)

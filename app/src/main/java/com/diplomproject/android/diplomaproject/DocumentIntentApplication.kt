@@ -9,5 +9,6 @@ class DocumentIntentApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         DocumentRepository.initialize(this)
+//        FirebaseApp.initializeApp(this)
     }
 }

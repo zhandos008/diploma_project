@@ -18,10 +18,16 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.diplomproject.android.diplomaproject.ui.theme.DiplomaProjectTheme
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.ktx.Firebase
 
 class MainActivity : ComponentActivity() {
 
     lateinit var navController: NavHostController
+
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -35,6 +41,14 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        var user = FirebaseAuth.getInstance().currentUser
+//        if(user == null) {
+//            navController.navigate(Screen.Menu.route)
+//        }
     }
 }
 

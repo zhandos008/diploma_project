@@ -43,9 +43,9 @@ fun MenuScreen(navController: NavHostController, context: Context) {
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
             Log.i("Testing", filePath.value)
-            navController.navigate(
-                "create/" + filePath.value
-            )
+//            navController.navigate(
+//                "create/" + filePath.value
+//            )
 
         }
     }
