@@ -15,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.diplomproject.android.diplomaproject.ui.theme.DiplomaProjectTheme
@@ -37,19 +38,27 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     navController  = rememberNavController()
-                    Setup(navController = navController, this)
+                    MainScreen(navController = navController)
                 }
             }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        var user = FirebaseAuth.getInstance().currentUser
-//        if(user == null) {
-//            navController.navigate(Screen.Menu.route)
-//        }
+    @Composable
+    fun MainScreen(navController: NavHostController) {
+        val user = FirebaseAuth.getInstance().currentUser
+        if(user != null) {
+            println("user logged")
+            Setup(navHostController = navController, navController = Screen.Menu.route, context = this)
+        } else {
+            println("user not logged")
+            Setup(navHostController = navController, context = this)
+        }
+
     }
+
+
+
 }
 
 

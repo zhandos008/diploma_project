@@ -77,7 +77,12 @@ fun SignInItems(navController: NavHostController,context: Context, modifier: Mod
                     .addOnSuccessListener { authResult ->
                         navController.navigate(
                             Screen.Menu.route
-                        )
+                        ) {
+                            popUpTo(Screen.SignIn.route) {
+                                inclusive = true
+                                saveState = true
+                            }
+                        }
                     }
                     .addOnFailureListener { exception ->
                         Toast.makeText(context, "User doesn't exist", Toast.LENGTH_SHORT).show()

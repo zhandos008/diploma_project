@@ -3,6 +3,7 @@ package com.diplomproject.android.diplomaproject
 import android.content.Context
 import android.provider.ContactsContract.CommonDataKinds.StructuredName
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -12,39 +13,40 @@ import com.diplomproject.android.diplomaproject.screen.*
 
 @Composable
 fun Setup(
-    navController: NavHostController,
+    navHostController: NavHostController,
+    navController: String = Screen.StartApp.route,
     context: Context
 ) {
     NavHost(
-        navController = navController,
-        startDestination = Screen.StartApp.route
+        navController = navHostController,
+        startDestination = navController
         ) {
         composable(
             route = Screen.StartApp.route
         ) {
-            StartAppScreen(navController, context = context)
+            StartAppScreen(navHostController, context = context)
         }
         composable(
             route = Screen.SignIn.route
         ) {
-            SignInScreen(navController)
+            SignInScreen(navHostController)
         }
         composable(
             route = Screen.SignUp.route
         ) {
-            SignUpScreen(navController)
+            SignUpScreen(navHostController)
         }
         composable(
             route = Screen.Menu.route
         ) {
-            MenuScreen(navController, context = context)
+            MenuScreen(navHostController, context = context)
         }
         composable(
             route = Screen.Create.route,
             arguments = listOf(navArgument("photoPath") { type = NavType.StringType })
         ) { backStackEntry ->
             val photoPath = backStackEntry.arguments?.getString(PHOTO_ARGUMENT).toString()
-            CreateDocumentScreen(navController, photoPath)
+            CreateDocumentScreen(navHostController, photoPath)
         }
     }
 }

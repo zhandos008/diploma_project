@@ -10,28 +10,42 @@ import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.diplomproject.android.diplomaproject.R
+import com.diplomproject.android.diplomaproject.Screen
+import com.diplomproject.android.diplomaproject.ui.theme.Purple500
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
+
 
 @Composable
 fun MenuScreen(navController: NavHostController, context: Context) {
@@ -43,16 +57,29 @@ fun MenuScreen(navController: NavHostController, context: Context) {
     val takePicture = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) { success ->
         if (success) {
             Log.i("Testing", filePath.value)
-//            navController.navigate(
-//                "create/" + filePath.value
-//            )
+            navController.navigate(
+                "create/" + filePath.value
+            )
 
         }
     }
 
+
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     Scaffold(
+        scaffoldState = scaffoldState,
         topBar = {
-            TopAppBar(title = { Text(text = "My Screen") })
+
+            TopAppBar(
+                title = { Text(text = "My Screen") },
+                navigationIcon = {
+                        SideMenuIcon(scope = scope, scaffoldState = scaffoldState)
+                    }
+            )
+        },
+        drawerContent = {
+            SideMenu(navController)
         },
         floatingActionButton = {
             FloatingActionButton(onClick = { dispatchTakePictureIntent(takePicture, context, filePath) }) {
@@ -83,6 +110,60 @@ fun MenuScreen(navController: NavHostController, context: Context) {
 
     }
 }
+
+@Composable
+fun SideMenuIcon(scope: CoroutineScope, scaffoldState: ScaffoldState) {
+    IconButton(
+        onClick = {
+                scope.launch {
+                    scaffoldState.drawerState.open()
+                }
+            },
+        ) {
+        Icon(
+            imageVector = Icons.Filled.Menu,
+            contentDescription = "Open Navigation Drawer"
+        )
+    }
+}
+
+
+
+@Composable
+fun SideMenu(navController: NavHostController) {
+    val firebaseAuthEmail = FirebaseAuth.getInstance().currentUser?.email
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(text = "${firebaseAuthEmail}")
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier) {
+            Text(text = "Settings")
+            Text(
+                text = "Log out",
+                modifier = Modifier.clickable(
+                    onClick = {
+                        FirebaseAuth.getInstance().signOut()
+                        navController.navigate(Screen.StartApp.route) {
+                            popUpTo(Screen.StartApp.route) {
+                                inclusive = true
+                                saveState = true
+                            }
+                        }
+                    }
+                )
+            )
+        }
+
+    }
+
+
+}
+
+
 
 
 
