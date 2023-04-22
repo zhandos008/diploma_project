@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "329184206568",
+    "firebase_url": "https://clickandchill-fd9c8-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "clickandchill-fd9c8",
+    "storage_bucket": "clickandchill-fd9c8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:329184206568:android:ee5e3f16db840dcfeeb35d",
+        "android_client_info": {
+          "package_name": "com.diplomproject.android.diplomaproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "329184206568-5fk04q7477kjc9arjfg1bp3q7c4mi1q1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhnNoFMVyxXU6Ctn4D3guHJIA8CApt3dM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "329184206568-5fk04q7477kjc9arjfg1bp3q7c4mi1q1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
