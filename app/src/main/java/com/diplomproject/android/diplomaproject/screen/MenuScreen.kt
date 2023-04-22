@@ -96,13 +96,7 @@ fun MenuScreen(navController: NavHostController, context: Context) {
 
                     Text("${item.id}")
 
-                    Image(
-                        bitmap = rememberImageBitmapFromCoroutine(context = LocalContext.current, imagePath = item.image),
-                        contentDescription = "sdsa",
-                        modifier = Modifier
-                            .width(350.dp)
-                            .height(150.dp)
-                    )
+                    Text("${item.text}")
                 }
             }
         }
@@ -167,18 +161,18 @@ fun SideMenu(navController: NavHostController) {
 
 
 
-@Composable
-fun rememberImageBitmapFromCoroutine(context: Context, imagePath: String): ImageBitmap {
-    val imageBitmapState = remember { mutableStateOf<ImageBitmap?>(null) }
-    val ImageBitmapStub = ImageBitmap(1, 1)
-    LaunchedEffect(imagePath) {
-        withContext(Dispatchers.IO) {
-            val imageBitmap = BitmapFactory.decodeFile(context.filesDir.canonicalPath + "/" + imagePath).asImageBitmap()
-            imageBitmapState.value = imageBitmap
-        }
-    }
-    return imageBitmapState.value ?: ImageBitmapStub
-}
+//@Composable
+//fun rememberImageBitmapFromCoroutine(context: Context, imagePath: String): ImageBitmap {
+//    val imageBitmapState = remember { mutableStateOf<ImageBitmap?>(null) }
+//    val ImageBitmapStub = ImageBitmap(1, 1)
+//    LaunchedEffect(imagePath) {
+//        withContext(Dispatchers.IO) {
+//            val imageBitmap = BitmapFactory.decodeFile(context.filesDir.canonicalPath + "/" + imagePath).asImageBitmap()
+//            imageBitmapState.value = imageBitmap
+//        }
+//    }
+//    return imageBitmapState.value ?: ImageBitmapStub
+//}
 
 @Composable
  fun SearchItem(modifier: Modifier = Modifier) {

@@ -8,5 +8,5 @@ import androidx.room.PrimaryKey
 data class Document(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val name: String,
-    val image: String
+    val text: String
 )

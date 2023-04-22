@@ -1,5 +1,6 @@
 package com.diplomproject.android.diplomaproject.screen
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -17,18 +18,15 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 
 
-import kotlinx.coroutines.*
 import java.io.File
 
 
-//"/data/user/0/com.diplomproject.android.diplomaproject/files/"
 @Composable
 fun CreateDocumentScreen(navController: NavHostController, photoName: String) {
     val viewModel = viewModel<CreateDocumentScreenViewModel>()
@@ -50,13 +48,14 @@ fun ChooseItems(photo: String, viewModel: CreateDocumentScreenViewModel, navCont
     val selectedOption = remember { mutableStateOf(options[0]) }
     var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
     Row() {
         Button(onClick = { /*TODO*/ }) {
           Text(text = "retake")  
         }
         Box{
             Text(
-                text = "${selectedOption.value}",
+                text = selectedOption.value,
                 modifier = Modifier
                     .padding(16.dp)
                     .clickable(onClick = { expanded = true })
@@ -77,8 +76,9 @@ fun ChooseItems(photo: String, viewModel: CreateDocumentScreenViewModel, navCont
                 }
             }
         }
-        Button(onClick = {
-            createDocument(photo = photo, viewModel = viewModel, navController, photoPath, context)
+        Button( onClick = {
+            println("Start ml")
+            viewModel.sendFileToFastAPI(File(photoPath), navController, context as Activity)
         }) {
             Text(text = "create")
         }
@@ -87,31 +87,6 @@ fun ChooseItems(photo: String, viewModel: CreateDocumentScreenViewModel, navCont
     }
 }
 
-fun createDocument(photo: String, viewModel: CreateDocumentScreenViewModel, navController: NavHostController, photoPath: String, context: Context) {
-    val document = viewModel.createDocument(photo)
-
-    println("Start ml")
-    viewModel.viewModelScope.launch {
-//        viewModel.addDocument(document)
-//        viewModel.requestApi(filePath = photoPath)
-        viewModel.sendFileToFastAPI(File(photoPath))
-    }
-
-
-//     var res = viewModel.workWithImage(context, File(photoPath))
-
-
-
-//    navController.navigate(
-//        Screen.Menu.route
-//    ) {
-//        popUpTo(Screen.Create.route) {
-//            inclusive = true
-//        }
-//    }
-
-
-}
 
 @Preview(showBackground = true)
 @Composable
