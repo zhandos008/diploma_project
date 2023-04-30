@@ -6,6 +6,8 @@ sealed class Screen(val route: String) {
     object SignIn: Screen("sign_in_screen")
     object SignUp: Screen("sign_up_screen")
     object Menu: Screen("menu_screen")
+
+    object Settings: Screen("settings_screen")
     object Create: Screen("create//data/user/0/com.diplomproject.android.diplomaproject/files/{photoPath}") {
 
     }

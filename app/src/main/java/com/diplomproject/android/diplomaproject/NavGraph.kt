@@ -42,6 +42,11 @@ fun Setup(
             MenuScreen(navHostController, context = context)
         }
         composable(
+            route = Screen.Settings.route
+        ) {
+            SettingsScreen(navHostController)
+        }
+        composable(
             route = Screen.Create.route,
             arguments = listOf(navArgument("photoPath") { type = NavType.StringType })
         ) { backStackEntry ->

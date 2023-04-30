@@ -2,7 +2,6 @@ package com.diplomproject.android.diplomaproject.screen
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -13,7 +12,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -21,28 +19,18 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.diplomproject.android.diplomaproject.R
 import com.diplomproject.android.diplomaproject.Screen
-import com.diplomproject.android.diplomaproject.ui.theme.Purple500
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.IOException
 
@@ -70,7 +58,6 @@ fun MenuScreen(navController: NavHostController, context: Context) {
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-
             TopAppBar(
                 title = { Text(text = "My Screen") },
                 navigationIcon = {
@@ -135,9 +122,15 @@ fun SideMenu(navController: NavHostController) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier) {
-            Text(text = "Settings")
+            Text(text = "Settings",
+                 modifier = Modifier.clickable(
+                     onClick = {
+                         navController.navigate(Screen.Settings.route)
+                     }
+                 ))
             Text(
                 text = "Log out",
+                color = Color.Red,
                 modifier = Modifier.clickable(
                     onClick = {
                         FirebaseAuth.getInstance().signOut()
@@ -161,18 +154,7 @@ fun SideMenu(navController: NavHostController) {
 
 
 
-//@Composable
-//fun rememberImageBitmapFromCoroutine(context: Context, imagePath: String): ImageBitmap {
-//    val imageBitmapState = remember { mutableStateOf<ImageBitmap?>(null) }
-//    val ImageBitmapStub = ImageBitmap(1, 1)
-//    LaunchedEffect(imagePath) {
-//        withContext(Dispatchers.IO) {
-//            val imageBitmap = BitmapFactory.decodeFile(context.filesDir.canonicalPath + "/" + imagePath).asImageBitmap()
-//            imageBitmapState.value = imageBitmap
-//        }
-//    }
-//    return imageBitmapState.value ?: ImageBitmapStub
-//}
+
 
 @Composable
  fun SearchItem(modifier: Modifier = Modifier) {
@@ -212,9 +194,7 @@ fun dispatchTakePictureIntent(
             "com.diplomproject.android.diplomaproject.fileprovider",
             it
         )
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
-            putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
-        }
+
         takePicture.launch(photoUri)
     }
     filePath.value = photoFile?.absolutePath ?: ""

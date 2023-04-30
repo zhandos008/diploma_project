@@ -48,37 +48,37 @@ fun SignUpScreen(
 
 @Composable
 fun SignUpItems(navController: NavHostController, modifier: Modifier = Modifier) {
-    var login = remember { mutableStateOf("") }
-    var password = remember { mutableStateOf("") }
-    var repeatablePassword = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val repeatablePassword = remember { mutableStateOf("") }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(bottom = 100.dp),
 
         ) {
-        TextField(value = login.value ,
-            onValueChange = {login.value  = it},
-            label = {Text("login")},
+        TextField(value = email.value ,
+            onValueChange = {email.value  = it},
+            label = {Text("email")},
             modifier = modifier
                 .padding(bottom = 10.dp)
-                .height(50.dp) )
+                .height(60.dp) )
         TextField(value = password.value,
             onValueChange = { password.value = it },
             label = {Text("password")},
             modifier = modifier
                 .padding(bottom = 10.dp)
-                .height(50.dp),
+                .height(60.dp),
             visualTransformation = PasswordVisualTransformation()
         )
         TextField(value = repeatablePassword.value,
             onValueChange = { repeatablePassword.value = it },
             label = {Text("confirm password")},
-            modifier = modifier.height(50.dp),
+            modifier = modifier.height(60.dp),
             visualTransformation = PasswordVisualTransformation()
         )
         Button(
             onClick = {
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(login.value, password.value)
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.value, password.value)
             },
             modifier = modifier
                 .width(150.dp)

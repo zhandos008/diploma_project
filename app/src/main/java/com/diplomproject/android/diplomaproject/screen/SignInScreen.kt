@@ -66,10 +66,10 @@ fun SignInItems(navController: NavHostController,context: Context, modifier: Mod
         modifier = modifier.padding(bottom = 100.dp),
         
     ) {
-        TextField(value = login.value , onValueChange = {login.value  = it}, label = {Text("login")},
-            modifier = modifier.padding(bottom = 10.dp).height(50.dp) )
+        TextField(value = login.value , onValueChange = {login.value  = it}, label = {Text("email")},
+            modifier = modifier.padding(bottom = 10.dp).height(60.dp) )
         TextField(value = password.value, onValueChange = { password.value = it },  label = {Text("password")},
-            modifier = modifier.height(50.dp), visualTransformation = PasswordVisualTransformation())
+            modifier = modifier.height(60.dp), visualTransformation = PasswordVisualTransformation())
         Button(
             onClick = {
                 val user = FirebaseAuth.getInstance()
