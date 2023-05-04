@@ -10,6 +10,9 @@ import androidx.navigation.NavHostController
 import com.diplomproject.android.diplomaproject.Screen
 import com.diplomproject.android.diplomaproject.database.CustomDocument
 import com.diplomproject.android.diplomaproject.database.DocumentRepository
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
 import kotlinx.coroutines.launch
 
@@ -82,7 +85,14 @@ class CreateDocumentScreenViewModel: ViewModel() {
 
                      activity.runOnUiThread {
                          viewModelScope.launch {
-                             addDocument(document)
+                             if(FirebaseAuth.getInstance().currentUser == null) {
+                                 addDocument(document)
+                             }
+                             else {
+                                 val dataBase = Firebase.database.reference
+
+                                 dataBase.child("User").child("document").setValue(document)
+                             }
                          }
 
                          navController.navigate(

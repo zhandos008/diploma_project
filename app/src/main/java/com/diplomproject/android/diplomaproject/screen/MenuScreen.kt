@@ -2,6 +2,7 @@ package com.diplomproject.android.diplomaproject.screen
 
 import android.Manifest
 import android.app.Activity
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -39,6 +40,13 @@ import com.diplomproject.android.diplomaproject.R
 import com.diplomproject.android.diplomaproject.Screen
 import com.diplomproject.android.diplomaproject.database.CustomDocument
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.auth.User
+import com.google.firebase.ktx.Firebase
 import com.itextpdf.text.Document
 import com.itextpdf.text.Font
 import com.itextpdf.text.Paragraph
@@ -46,6 +54,8 @@ import com.itextpdf.text.pdf.BaseFont
 import com.itextpdf.text.pdf.PdfPageEventHelper
 import com.itextpdf.text.pdf.PdfWriter
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
@@ -156,13 +166,62 @@ fun MenuScreen(navController: NavHostController, context: Context) {
                     }
                 }
             else {
+                LazyColumn() {
 
+
+                    items(count = viewModel.documentsFire.value.size) {
+                        val item = viewModel.documentsFire.collectAsState().value.get(it)
+                        println(item)
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Row() {
+                                Text("${it + 1} ", fontSize = 30.sp)
+
+                                Text(item.name + " ", fontSize = 30.sp)
+                            }
+
+                            Row() {
+                                Icon(
+                                    Icons.Default.Delete,
+                                    contentDescription = "Download Icon",
+                                    modifier = Modifier
+                                        .width(45.dp)
+                                        .height(45.dp)
+                                        .clickable(
+                                            onClick = {
+                                            }
+                                        )
+                                )
+
+                                Icon(
+                                    Icons.Default.ArrowDropDown,
+                                    contentDescription = "Delete Icon",
+                                    modifier = Modifier
+                                        .width(45.dp)
+                                        .height(45.dp)
+                                        .clickable(
+                                            onClick = {
+                                                viewModel.downloadPdf(item, context)
+                                            }
+                                        )
+                                )
+                            }
+
+                        }
+
+
+                    }
+                }
             }
         }
 
 
     }
 }
+
+
 
 
 

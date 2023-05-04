@@ -3,12 +3,18 @@ package com.diplomproject.android.diplomaproject.screen
 import android.content.Context
 import android.content.Intent
 import android.os.Environment
+import androidx.compose.runtime.mutableStateListOf
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.diplomproject.android.diplomaproject.BuildConfig
 import com.diplomproject.android.diplomaproject.database.CustomDocument
 import com.diplomproject.android.diplomaproject.database.DocumentRepository
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.itextpdf.text.Document
 import com.itextpdf.text.Font
 import com.itextpdf.text.Paragraph
@@ -28,12 +34,38 @@ class MenuScreenViewModel: ViewModel() {
     private val _documents: MutableStateFlow<List<CustomDocument>> = MutableStateFlow(emptyList())
     val documents: StateFlow<List<CustomDocument>> = _documents.asStateFlow()
 
+    private val usersRef = Firebase.database.reference.child("User")
+    private var _documentsFire:  MutableStateFlow<List<CustomDocument>> = MutableStateFlow(emptyList())
+
+
+    val documentsFire: StateFlow<List<CustomDocument>> = _documentsFire
+
     init {
         viewModelScope.launch {
             documentRepository.getDocuments().collect() {
                 _documents.value = it
             }
         }
+
+        usersRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val documentList = mutableListOf<CustomDocument>()
+                for (userSnapshot in dataSnapshot.children) {
+                    val userName = userSnapshot.child("name").getValue(String::class.java) ?: ""
+                    val userText = userSnapshot.child("text").getValue(String::class.java) ?: ""
+                    val user = CustomDocument(name = userName, text = userText)
+                    documentList.add(user)
+                }
+                _documentsFire.value = documentList
+                println(_documentsFire.value.get(0).text)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle error
+            }
+        })
+
+
     }
 
     fun downloadPdf(documentForDownload: CustomDocument, context: Context) {
