@@ -64,7 +64,7 @@ class CreateDocumentScreenViewModel: ViewModel() {
             .build()
 
         val request = Request.Builder()
-            .url("http://192.168.0.11:8000/model")
+            .url("http://192.168.0.10:8000/model")
             .post(requestBody)
             .build()
 

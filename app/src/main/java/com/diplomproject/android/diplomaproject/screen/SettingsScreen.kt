@@ -78,19 +78,36 @@ fun SettingsScreen(navController: NavHostController) {
             },
             backgroundColor = Color.White
         )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = "E-address", fontSize = 25.sp, modifier = Modifier.weight(1f))
-            Text(text = email.value, fontSize = 25.sp, modifier = Modifier.weight(1f))
+        Column() {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "E-address", fontSize = 25.sp, modifier = Modifier.weight(1f))
+                Text(text = email.value, fontSize = 20.sp, modifier = Modifier.weight(1f))
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = "password", fontSize = 25.sp, modifier = Modifier.weight(1f))
+                Text(text = "********", fontSize = 20.sp, modifier = Modifier.weight(1f))
+            }
+            Text(text = "Clear Cache",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(10.dp),
+                color = Color(198, 105, 200))
         }
+
         Column(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .padding(20.dp),
                 horizontalAlignment = Alignment.Start
         ) {
@@ -100,13 +117,13 @@ fun SettingsScreen(navController: NavHostController) {
             Text(text = "Delete account",
                 fontSize = 25.sp,
                 modifier = Modifier
-                .padding(4.dp)
-                .clickable(
-                    onClick = {
-                        dialogState.value = true
+                    .padding(4.dp)
+                    .clickable(
+                        onClick = {
+                            dialogState.value = true
 
-                    }
-                ), color = Color.Red)
+                        }
+                    ), color = Color.Red)
         }
     }
 }

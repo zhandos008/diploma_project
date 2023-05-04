@@ -34,7 +34,7 @@ fun CreateDocumentScreen(navController: NavHostController, photoName: String) {
     val photoPath = LocalContext.current.filesDir.canonicalPath+ "/" + photoName
     val bitmapFactory = BitmapFactory.decodeFile(photoPath)
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().padding(0.dp, 150.dp, 0.dp, 0.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -52,15 +52,17 @@ fun ChooseItems(photo: String, viewModel: CreateDocumentScreenViewModel, navCont
     ) {
         Button(
             onClick = { /*TODO*/ },
+            modifier = Modifier.padding(30.dp, 0.dp, 0.dp, 0.dp)
         ) {
           Text(text = "retake")  
         }
-
         Button( onClick = {
             println("Start ml")
             viewModel.sendFileToFastAPI(File(photoPath), navController, context as Activity)
-        }) {
-            Text(text = "create")
+        },
+            modifier = Modifier.padding(0.dp, 0.dp, 30.dp, 0.dp)
+        ) {
+            Text(text = "create", )
         }
         
         

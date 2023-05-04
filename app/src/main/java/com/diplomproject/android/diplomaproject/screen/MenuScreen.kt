@@ -255,7 +255,7 @@ fun SideMenu(navController: NavHostController) {
         modifier = Modifier.fillMaxSize()
     ) {
         Text(
-            text = "${firebaseAuthEmail}",
+            text = firebaseAuthEmail ?: "Guest",
             fontSize = 30.sp,
             modifier = Modifier.padding(25.dp)
         )
