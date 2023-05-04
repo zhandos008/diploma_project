@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavHostController
 
 import com.diplomproject.android.diplomaproject.Screen
-import com.diplomproject.android.diplomaproject.database.Document
+import com.diplomproject.android.diplomaproject.database.CustomDocument
 import com.diplomproject.android.diplomaproject.database.DocumentRepository
 
 import kotlinx.coroutines.launch
@@ -32,7 +32,7 @@ import org.json.JSONArray
 class CreateDocumentScreenViewModel: ViewModel() {
     private lateinit var documentRepository: DocumentRepository
 
-    suspend fun addDocument(document: Document) {
+    suspend fun addDocument(document: CustomDocument) {
         documentRepository = DocumentRepository.get()
         documentRepository.createDocument(document)
     }
@@ -61,7 +61,7 @@ class CreateDocumentScreenViewModel: ViewModel() {
             .build()
 
         val request = Request.Builder()
-            .url("http://192.168.0.17:8000/model")
+            .url("http://192.168.0.11:8000/model")
             .post(requestBody)
             .build()
 
@@ -70,7 +70,7 @@ class CreateDocumentScreenViewModel: ViewModel() {
          client.newCall(request).enqueue(object : Callback {
              override fun onResponse(call: Call, response: Response) {
                  if (response.isSuccessful) {
-                     println("Файл успешно отправлен в FastAPI")
+                     println("success")
                      val responseBody = response.body?.string()
                      val jsonArray = JSONArray(responseBody)
                      for (i in 0 until jsonArray.length()) {
@@ -86,7 +86,7 @@ class CreateDocumentScreenViewModel: ViewModel() {
                          }
 
                          navController.navigate(
-                             Screen.Menu.route
+                             "download_screen/" + document.text
                          ) {
                              popUpTo(Screen.Create.route) {
                                  inclusive = true
@@ -97,12 +97,12 @@ class CreateDocumentScreenViewModel: ViewModel() {
 
 
                  } else {
-                     println("Не удалось отправить файл в FastAPI")
+                     println("doesn't success")
                  }
              }
 
              override fun onFailure(call: Call, e: IOException) {
-                 println("Ошибка отправки файла в FastAPI: $e")
+                 println("error: $e")
              }
          })
 
@@ -111,8 +111,8 @@ class CreateDocumentScreenViewModel: ViewModel() {
 
 
 
-    fun createDocument(text: String): Document {
-        return Document(name = "photo", text = text)
+    fun createDocument(text: String): CustomDocument {
+        return CustomDocument(name = "document.pdf", text = text)
     }
 
 }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.modifier.modifierLocalConsumer
 
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,38 +45,17 @@ fun CreateDocumentScreen(navController: NavHostController, photoName: String) {
 
 @Composable
 fun ChooseItems(photo: String, viewModel: CreateDocumentScreenViewModel, navController: NavHostController, photoPath: String) {
-    val options = listOf("english", "russia", "kazakh")
-    val selectedOption = remember { mutableStateOf(options[0]) }
-    var expanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    Row() {
-        Button(onClick = { /*TODO*/ }) {
+    Row(
+        modifier = Modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Button(
+            onClick = { /*TODO*/ },
+        ) {
           Text(text = "retake")  
         }
-        Box{
-            Text(
-                text = selectedOption.value,
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clickable(onClick = { expanded = true })
-            )
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                options.forEach { option ->
-                    DropdownMenuItem(
-                        onClick = {
-                            selectedOption.value = option
-                            expanded = false
-                        }
-                    ) {
-                        Text(text = option)
-                    }
-                }
-            }
-        }
+
         Button( onClick = {
             println("Start ml")
             viewModel.sendFileToFastAPI(File(photoPath), navController, context as Activity)

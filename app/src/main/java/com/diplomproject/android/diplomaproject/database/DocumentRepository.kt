@@ -18,11 +18,11 @@ class DocumentRepository private constructor(context: Context){
 
 
 
-    fun getDocuments(): Flow<List<Document>> = database.documentDao().getDocuments()
+    fun getDocuments(): Flow<List<CustomDocument>> = database.documentDao().getDocuments()
 
-    suspend fun getDocument(id: Int): Document = database.documentDao().getDocument(id)
+    suspend fun getDocument(id: Int): CustomDocument = database.documentDao().getDocument(id)
 
-    suspend fun createDocument(document: Document) {
+    suspend fun createDocument(document: CustomDocument) {
         database.documentDao().createDocument(document)
     }
 

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Environment
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.diplomproject.android.diplomaproject.BuildConfig
 import com.diplomproject.android.diplomaproject.database.CustomDocument
 import com.diplomproject.android.diplomaproject.database.DocumentRepository
@@ -15,30 +14,18 @@ import com.itextpdf.text.Paragraph
 import com.itextpdf.text.pdf.BaseFont
 import com.itextpdf.text.pdf.PdfPageEventHelper
 import com.itextpdf.text.pdf.PdfWriter
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-class MenuScreenViewModel: ViewModel() {
-    private val documentRepository = DocumentRepository.get()
+class DocumentDownloadViewModel: ViewModel() {
 
-    private val _documents: MutableStateFlow<List<CustomDocument>> = MutableStateFlow(emptyList())
-    val documents: StateFlow<List<CustomDocument>> = _documents.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            documentRepository.getDocuments().collect() {
-                _documents.value = it
-            }
-        }
+    suspend fun getDocument(id: Int): CustomDocument{
+        return DocumentRepository.get().getDocument(id)
     }
 
-    fun downloadPdf(documentForDownload: CustomDocument, context: Context) {
+    fun downloadPdf(text: String, context: Context) {
 
-        val fileName = "" + documentForDownload.id+  "-"+ documentForDownload.name
+        val fileName = "newDocument"
         val filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).toString() + "/" + fileName
         val outputStream = FileOutputStream(filePath)
 
@@ -56,7 +43,7 @@ class MenuScreenViewModel: ViewModel() {
 
 
 
-        val paragraph = Paragraph(documentForDownload.text, font)
+        val paragraph = Paragraph(text, font)
         document.add(paragraph)
 
         document.close()
@@ -71,5 +58,7 @@ class MenuScreenViewModel: ViewModel() {
         val chooser = Intent.createChooser(intent, "Open with")
         context.startActivity(chooser)
     }
+
+
 
 }

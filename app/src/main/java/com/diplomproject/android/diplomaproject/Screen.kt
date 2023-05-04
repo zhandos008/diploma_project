@@ -8,6 +8,8 @@ sealed class Screen(val route: String) {
     object Menu: Screen("menu_screen")
 
     object Settings: Screen("settings_screen")
+
+    object FileDownload: Screen("download_screen/{text}")
     object Create: Screen("create//data/user/0/com.diplomproject.android.diplomaproject/files/{photoPath}") {
 
     }

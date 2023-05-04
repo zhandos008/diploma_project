@@ -47,6 +47,13 @@ fun Setup(
             SettingsScreen(navHostController)
         }
         composable(
+            route = Screen.FileDownload.route,
+            arguments = listOf(navArgument("text") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val fileText = requireNotNull(backStackEntry.arguments?.getString("text"))
+            FileDownloadScreen(navHostController, context,  fileText)
+        }
+        composable(
             route = Screen.Create.route,
             arguments = listOf(navArgument("photoPath") { type = NavType.StringType })
         ) { backStackEntry ->

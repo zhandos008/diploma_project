@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.diplomproject.android.diplomaproject.Screen
@@ -74,7 +75,8 @@ fun SettingsScreen(navController: NavHostController) {
                         contentDescription = "Back"
                     )
                 }
-            }
+            },
+            backgroundColor = Color.White
         )
 
         Row(
@@ -84,16 +86,20 @@ fun SettingsScreen(navController: NavHostController) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "E-address", modifier = Modifier.weight(1f))
-            Text(text = email.value, modifier = Modifier.weight(1f))
+            Text(text = "E-address", fontSize = 25.sp, modifier = Modifier.weight(1f))
+            Text(text = email.value, fontSize = 25.sp, modifier = Modifier.weight(1f))
         }
         Column(
                 modifier = Modifier.fillMaxWidth()
                     .padding(20.dp),
                 horizontalAlignment = Alignment.Start
         ) {
-            Text(text = "Log out", modifier = Modifier.padding(4.dp))
-            Text(text = "Delete account", modifier = Modifier
+            Text(text = "Log out",
+                fontSize = 25.sp,
+                modifier = Modifier.padding(4.dp))
+            Text(text = "Delete account",
+                fontSize = 25.sp,
+                modifier = Modifier
                 .padding(4.dp)
                 .clickable(
                     onClick = {
